@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-section {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #3498db;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-right: 20px;
+    }
+
+    .profile-details h2 {
+        margin: 0 0 5px 0;
+        color: #333;
+    }
+
+    .profile-details p {
+        margin: 0;
+        color: #666;
+    }
+
+    .bookings-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .booking-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: transform 0.2s;
+    }
+
+    .booking-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .booking-restaurant {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        color: #2c3e50;
+    }
+
+    .booking-details {
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .booking-actions {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .booking-actions a {
+        padding: 5px 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .edit-btn {
+        background-color: #3498db;
+        color: white;
+    }
+
+    .cancel-btn {
+        background-color: #e74c3c;
+        color: white;
+        height: 100%;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .no-bookings {
+        text-align: center;
+        padding: 30px;
+        color: #666;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .create-booking-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #2ecc71;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-section">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user.email[0] | upper }}
+        </div>
+        <div class="profile-details">
+            <h2>Личный кабинет</h2>
+            <p>{{ user.email }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="profile-section">
+    <h3>Мои бронирования</h3>
+
+    {% if bookings %}
+        <div class="bookings-list">
+            {% for booking in bookings %}
+                <div class="booking-card">
+                    <div class="booking-restaurant">{{ booking.restaurant_name }}</div>
+                    <div class="booking-details">
+                        <strong>Дата и время:</strong> {{ booking.date_time.strftime('%d.%m.%Y, %H:%M') }}
+                    </div>
+                    <div class="booking-details">
+                        <strong>Столик:</strong> №{{ booking.table_number }} ({{ booking.seats }} мест)
+                    </div>
+                    <div class="booking-actions">
+                        <a href="/bookings/{{ booking.id }}/edit" class="edit-btn">Изменить</a>
+                        <form action="/bookings/{{ booking.id }}" method="post" class="delete-form">
+                            <input type="hidden" name="method_type" value="delete">
+                            <button type="submit" class="cancel-btn">Отменить</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-bookings">
+            <p>У вас пока нет бронирований.</p>
+            <a href="/bookings/new" class="create-booking-btn">Забронировать столик</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

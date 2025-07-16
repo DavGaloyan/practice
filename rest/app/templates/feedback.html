@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Обратная связь{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Форма обратной связи</h2>
+                </div>
+                <div class="card-body">
+                    <form action="/feedback" method="post" id="feedbackForm">
+                        <div class="form-group mb-3">
+                            <label for="name">Ваше имя</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required 
+                                {% if current_user %}value="{{ current_user.email }}"{% endif %}>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="subject">Тема</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="message">Сообщение</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Общие стили для всего сайта */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #ffffff;
+    color: #333333;
+    transition: background-color 0.4s, color 0.4s;
+    font-family: Arial, sans-serif;
+}
+
+body.dark-theme {
+    background-color: #121212;
+    color: #f0f0f0;
+}
+
+/* Стили кнопок управления темой */
+.theme-controls {
+    position: fixed;
+    top: 65px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.theme-btn {
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+    outline: none;
+    backdrop-filter: blur(4px);
+}
+
+.theme-btn:hover {
+    transform: scale(1.15);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.theme-btn:active {
+    transform: scale(0.9);
+}
+
+#theme-toggle {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#system-theme {
+    font-size: 1.3rem;
+}
+
+/* Стили для навигации по сайту */
+.site-navigation {
+    padding: 20px;
+    background: rgba(0,0,0,0.05);
+}
+
+.site-navigation a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: #0066cc;
+}
+
+.dark-theme .site-navigation a {
+    color: #4da6ff;
+}
+
+.content {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+</style>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('feedbackForm');
+    
+    form.addEventListener('submit', function(e) {
+        // Валидация формы на стороне клиента
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim();
+        const message = document.getElementById('message').value.trim();
+        
+        if (!name || !email || !subject || !message) {
+            e.preventDefault();
+            alert('Пожалуйста, заполните все поля формы');
+            return false;
+        }
+        
+        // Валидация email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            e.preventDefault();
+            alert('Пожалуйста, введите корректный email адрес');
+            return false;
+        }
+        
+        return true;
+    });
+});
+</script>
+<script src="{{ url_for('static', path='/js/dark.js') }}" defer></script>
+
+{% endblock %}

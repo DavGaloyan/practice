@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}О нас - Система бронирования ресторанов{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>О нас</h1>
+</div>
+
+<div class="about-content">
+    <section class="about-section">
+        <h2>Наша миссия</h2>
+        <p>Наш проект создан для упрощения бронирования ресторанов. Наша миссия – сделать ваш опыт удобным и приятным!</p>
+    </section>
+    
+    <section class="about-section">
+        <h2>Наши ценности</h2>
+        <p>Мы ценим ваш комфорт и работаем над тем, чтобы каждая деталь вашего посещения была продумана.</p>
+        <ul class="values-list">
+            <li>Удобство для пользователей</li>
+            <li>Высокое качество обслуживания</li>
+            <li>Надежность и безопасность</li>
+            <li>Постоянное совершенствование</li>
+        </ul>
+    </section>
+    
+    <section class="about-section">
+        <h2>История проекта</h2>
+        <p>Наш проект был создан в 2025 году группой энтузиастов, которые хотели сделать процесс бронирования ресторанов максимально удобным и прозрачным.</p>
+        <p>За короткое время мы стали надежным партнером для многих ресторанов и любимым сервисом для тысяч пользователей.</p>
+    </section>
+</div>
+
+<div class="cta-section">
+    <h3>Присоединяйтесь к нам!</h3>
+    <p>Зарегистрируйтесь сейчас и начните пользоваться всеми преимуществами нашего сервиса.</p>
+    <a href="/auth/register" class="btn-primary">Зарегистрироваться</a>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .about-section {
+        margin-bottom: 2rem;
+    }
+    
+    .values-list {
+        margin-left: 1.5rem;
+        line-height: 1.6;
+    }
+    
+    .cta-section {
+        background-color: #f5f5f5;
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .btn-primary {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-top: 1rem;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-primary:hover {
+        background-color: #45a049;
+    }
+</style>
+{% endblock %}

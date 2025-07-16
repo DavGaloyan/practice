@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Успешный вход - Система бронирования ресторанов{% endblock %}
+
+{% block content %}
+<div class="success-container">
+    <div class="success-card">
+        <div class="success-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="#4CAF50"/>
+            </svg>
+        </div>
+        <h1>Вход выполнен успешно!</h1>
+        <p class="success-message">Добро пожаловать в систему бронирования ресторанов.</p>
+        
+        <div class="token-info">
+            <p>Ваш токен доступа:</p>
+            <div class="token-display">
+                <code>{{ token }}</code>
+                <button class="copy-btn" id="copyToken">Копировать</button>
+            </div>
+            <p class="token-note">Сохраните этот токен в надежном месте. Он потребуется для доступа к API.</p>
+        </div>
+        
+        <div class="success-actions">
+            <a href="/" class="btn-primary">На главную</a>
+            <a href="/restaurants" class="btn-secondary">Перейти к ресторанам</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-container {
+        max-width: 600px;
+        margin: 3rem auto;
+        padding: 1rem;
+    }
+    
+    .success-card {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .success-icon {
+        margin-bottom: 1.5rem;
+    }
+    
+    .success-card h1 {
+        color: #4CAF50;
+        margin-bottom: 1rem;
+    }
+    
+    .success-message {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .token-info {
+        background-color: #f9f9f9;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+    
+    .token-display {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+        position: relative;
+    }
+    
+    .token-display code {
+        background-color: #eee;
+        padding: 0.8rem;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 0.9rem;
+        overflow: auto;
+        white-space: nowrap;
+        flex: 1;
+    }
+    
+    .copy-btn {
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .copy-btn:hover {
+        background-color: #0b7dda;
+    }
+    
+    .token-note {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 0.5rem;
+    }
+    
+    .success-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .btn-primary {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-primary:hover {
+        background-color: #45a049;
+    }
+    
+    .btn-secondary {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background-color: #2196F3;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #0b7dda;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyButton = document.getElementById('copyToken');
+        const tokenCode = document.querySelector('.token-display code');
+        
+        copyButton.addEventListener('click', function() {
+            const textArea = document.createElement('textarea');
+            textArea.value = tokenCode.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Изменение текста кнопки на время
+            copyButton.textContent = 'Скопировано!';
+            setTimeout(() => {
+                copyButton.textContent = 'Копировать';
+            }, 2000);
+        });
+    });
+</script>
+{% endblock %}

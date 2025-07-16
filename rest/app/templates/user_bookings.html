@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Мои бронирования - Система бронирования ресторанов{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-section">
+        <h1>Мои бронирования</h1>
+
+        {% if bookings %}
+        <div class="booking-list">
+            {% for booking in bookings %}
+            <div class="booking-card">
+                <div class="booking-header">
+                    <h3>Бронирование #{{ booking.id }}</h3>
+                    <div class="booking-date">{{ booking.date_time.strftime('%d.%m.%Y %H:%M') }}</div>
+                </div>
+
+                <div class="booking-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Ресторан:</span>
+                        <span class="detail-value">{{ booking.table.restaurant.name }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Адрес:</span>
+                        <span class="detail-value">{{ booking.table.restaurant.address }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Столик:</span>
+                        <span class="detail-value">№{{ booking.table.number }} ({{ booking.table.seats }} мест)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Статус:</span>
+                        <span class="detail-value status-badge status-{{ booking.status }}">
+                            {% if booking.status == 'confirmed' %}
+                                Подтверждено
+                            {% elif booking.status == 'cancelled' %}
+                                Отменено
+                            {% elif booking.status == 'completed' %}
+                                Завершено
+                            {% else %}
+                                {{ booking.status }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="booking-actions">
+                    <a href="/bookings/{{ booking.id }}/edit" class="btn-edit">Изменить</a>
+                    <form action="/bookings/{{ booking.id }}" method="post" class="delete-form">
+                        <input type="hidden" name="method_type" value="delete">
+                        <button type="submit" class="btn-delete">Отменить</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-bookings">
+            <p>У вас пока нет бронирований.</p>
+            <div class="empty-state-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19Z" fill="#CCCCCC"/>
+                    <path d="M17 12H7V14H17V12Z" fill="#CCCCCC"/>
+                </svg>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="action-buttons">
+            <a href="/bookings/new" class="btn-primary">Забронировать столик</a>
+            <a href="/restaurants" class="btn-secondary">Посмотреть рестораны</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-section {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 1rem;
+    }
+
+    .booking-list {
+        margin-top: 2rem;
+    }
+
+    .booking-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+
+    .booking-header {
+        background-color: #f5f5f5;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .booking-header h3 {
+        margin: 0;
+        color: #333;
+        font-size: 1.2rem;
+    }
+
+    .booking-date {
+        font-weight: bold;
+        color: #2196F3;
+    }
+
+    .booking-details {
+        padding: 1.5rem;
+    }
+
+    .detail-row {
+        display: flex;
+        margin-bottom: 0.75rem;
+    }
+
+    .detail-label {
+        width: 100px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .detail-value {
+        flex: 1;
+        color: #333;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+
+    .status-confirmed {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
+    }
+
+    .status-cancelled {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+
+    .status-completed {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+
+    .booking-actions {
+        padding: 1rem;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+
+    .btn-edit {
+        padding: 0.5rem 1rem;
+        background-color: #2196F3;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .btn-edit:hover {
+        background-color: #0b7dda;
+    }
+
+    .delete-form {
+        display: inline;
+    }
+
+    .btn-delete {
+        padding: 0.5rem 1rem;
+        background-color: #f44336;
+        height: 100%;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .btn-delete:hover {
+        background-color: #d32f2f;
+    }
+
+    .no-bookings {
+        text-align: center;
+        padding: 3rem 1rem;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        margin: 2rem 0;
+    }
+
+    .empty-state-icon {
+        margin: 1.5rem 0;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn-primary {
+        padding: 0.8rem 1.5rem;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #45a049;
+    }
+
+    .btn-secondary {
+        padding: 0.8rem 1.5rem;
+        background-color: #2196F3;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .btn-secondary:hover {
+        background-color: #0b7dda;
+    }
+</style>
+{% endblock %}

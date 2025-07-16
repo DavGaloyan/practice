@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Система бронирования ресторанов{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+    {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', path='/dark.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">Ресторанный гид</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/restaurants">Рестораны</a></li>
+                <li><a href="/info/about">О нас</a></li>
+                <li><a href="/info/contacts">Контакты</a></li>
+                <li><a href="/info/faq">FAQ</a></li>
+                <li><a href="/feedback">Обратная связь</a></li>
+                {% if user %}
+                    <li><a href="/profile">Профиль</a></li>
+                    <li><a href="/profile/bookings">Мои бронирования</a></li>
+                    <li><a href="/bookings/new">Забронировать столик</a></li>
+                    <li><a href="/auth/logout">Выйти</a></li>
+                {% else %}
+                    <li><a href="/auth/login">Войти</a></li>
+                    <li><a href="/auth/register">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Система бронирования ресторанов</p>
+        </div>
+    </footer>
+
+     <div class="theme-controls">
+        <button id="system-theme" class="theme-btn" aria-label="Системная тема" title="Сбросить к системной теме">🌍</button>
+        <button id="theme-toggle" class="theme-btn" aria-label="Переключить тему" title="Переключить тему">🌙</button>
+    </div>
+    {% block extra_js %}
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/dark.js') }}"></script>
+    {% endblock %}
+</body>
+</html>

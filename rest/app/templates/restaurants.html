@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Рестораны{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Рестораны</h1>
+    <p>Выберите ресторан для бронирования</p>
+</div>
+
+<div class="restaurant-grid">
+    {% for restaurant in restaurants %}
+    <div class="restaurant-card">
+        <div class="restaurant-image" style="background-image: url('{{ restaurant.image_url or '/static/images/default-restaurant.jpg' }}')"></div>
+        <div class="restaurant-info">
+            <h3>{{ restaurant.name }}</h3>
+            <p>{{ restaurant.description }}</p>
+            <p><strong>Адрес:</strong> {{ restaurant.address }}</p>
+            <a href="/restaurants/{{ restaurant.id }}/" class="btn">Подробнее</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p>Рестораны не найдены. Пожалуйста, попробуйте позже.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

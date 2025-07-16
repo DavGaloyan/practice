@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Booking{% endblock %}
+
+{% block content %}
+    <h1>Edit Booking</h1>
+    <form action="/bookings/{{ booking.id }}" method="post">
+        <input type="hidden" name="_method" value="put">
+
+        <label for="restaurant">Restaurant:</label>
+        <select name="restaurant_id" id="restaurant">
+            {% for restaurant in restaurants %}
+            <option value="{{ restaurant.id }}" {% if restaurant.id == booking.restaurant_id %}selected{% endif %}>
+                {{ restaurant.name }}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label for="table">Table:</label>
+        <select name="table_id" id="table">
+            {% for table in tables %}
+            <option value="{{ table.id }}" {% if table.id == booking.table_id %}selected{% endif %}>
+                Table {{ table.number }} (Seats: {{ table.seats }})
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label for="date_time">Date and Time:</label>
+        <input type="datetime-local" name="date_time" id="date_time" value="{{ booking.date_time }}" required>
+        <br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+{% endblock %}
